@@ -10,6 +10,7 @@ Right now, here are the current ideas for this project:
     - game where clip is fetched from random vod and viewers have to guess how long ago it was
  - turing\_earth\_boat
     - Gambling bot that can loan points for predictions. Would likely use Twitch API for predictions.
+    - Word cloud that shows the N most used words
 
 ## TODOS
  - [ ] Decide on project idea. Needs to happen by Monday or we're all screwed.
