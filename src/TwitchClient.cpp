@@ -9,7 +9,21 @@ TwitchClient::TwitchClient(
 ): m_bearer(bearer), m_client_id(client_id) {
 }
 
+TwitchClient::TwitchClient(): TwitchClient("", "") {
+}
+
+void TwitchClient::setBearer(std::string bearer) {
+    m_bearer = bearer;
+}
+
+void TwitchClient::setClientId(std::string client_id) {
+    m_client_id = client_id;
+}
+
 cpr::Response TwitchClient::fetch(const std::string& endpoint, const std::initializer_list<cpr::Parameter>& params) {
+    if (m_bearer == "" || m_client_id == "") {
+        throw std::invalid_argument("Either bearer or client id were empty strings");
+    }
     std::string url = base_url + endpoint;
     cpr::Response r = cpr::Get(
         cpr::Url{url},

@@ -13,18 +13,15 @@ include(helpers)
 
 add_library(${CMAKE_PROJECT_NAME} MODULE)
 
+# LibOBS
 find_package(libobs REQUIRED)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE OBS::libobs)
 
+# OBS frontend
 if(ENABLE_FRONTEND_API)
   find_package(obs-frontend-api REQUIRED)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE OBS::obs-frontend-api)
 endif()
-
-add_library(TwitchClient STATIC)
-find_package(cpr REQUIRED)
-target_sources(TwitchClient PRIVATE src/TwitchClient.cpp src/TwitchClient.hpp)
-target_link_libraries(TwitchClient PRIVATE cpr::cpr)
 
 if(ENABLE_QT)
   find_qt(COMPONENTS Widgets Core)
@@ -44,8 +41,22 @@ endif()
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-main.cpp src/test.cpp)
 
+add_library(TwitchClient STATIC)
+find_package(cpr REQUIRED)
+target_sources(TwitchClient PRIVATE src/TwitchClient.cpp src/TwitchClient.hpp)
+target_link_libraries(TwitchClient PRIVATE cpr::cpr)
+
 add_executable(TwitchClientTest)
 target_sources(TwitchClientTest PRIVATE src/TwitchClientTest.cpp)
 target_link_libraries(TwitchClientTest PRIVATE TwitchClient)
+
+find_package(nlohmann_json 3.2.0 REQUIRED)
+add_library(TwitchClipFetcher STATIC)
+target_sources(TwitchClipFetcher PRIVATE src/TwitchClipFetcher.cpp src/TwitchClipFetcher.hpp)
+target_link_libraries(TwitchClipFetcher PRIVATE nlohmann_json::nlohmann_json)
+
+add_executable(TwitchClipFetcherTest)
+target_sources(TwitchClipFetcherTest PRIVATE src/TwitchClipFetcherTest.cpp)
+target_link_libraries(TwitchClipFetcherTest PRIVATE TwitchClipFetcher TwitchClient)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})
