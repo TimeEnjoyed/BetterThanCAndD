@@ -1,27 +1,26 @@
 # 2023 Codejam
 
 ## Project Description
-Right now, here are the current ideas for this project:
- - dydevx
-   - Twitch redeem feature that allows a user to randomly play a clip from the past for sake of nostalgia
- - Razvan
-    - time management tool
-    - time capsule
-    - game where clip is fetched from random vod and viewers have to guess how long ago it was
- - turing\_earth\_boat
-    - Gambling bot that can loan points for predictions. Would likely use Twitch API for predictions.
-    - Word cloud that shows the N most used words
 
-## TODOS
- - [ ] Decide on project idea. Needs to happen by Monday or we're all screwed.
- - [ ] Create a Twitch account for use of project. This inevitably brings up the issue of credential sharing, which is a pain in the neck.
+This was supposed to be a nostalgia clip fetcher, but unfortunately, due to time constraints,
+the project was not able to be finished by the end of the Codejam. The way it was supposed
+to work was that the user would type the name of a browser source (already created by the user),
+and the OBS plugin would change the URL of the browser source to a random clip from a streamer
+(likely the user).
 
-## Tools/Libraries
-At the moment, nothing is set in stone. However, these are the tools that might be used:
- - CMake as build system
- - libcurl or [TwitchXX](https://github.com/burannah/TwitchXX) for API requests, though TwitchXX hasn't been updated in years
- - Catch2 or Google Test for unit testing
- - OBS extensions library
+## Build Instructions
+Compilation was just tested on Linux. CMake, nlohmann/json, and libcpr/cpr are required to build
+the project.
+
+To build, one can type on a terminal in the root directory of the project:
+```
+$ mkdir build # ni -ItemType "Directory" build
+$ cd build    # sl build
+$ cmake ..    # cmake ..
+$ make        # cmake --build .
+$ sudo cp codejam.so /usr/lib/x86_64-linux-gnu/obs-plugins/codejam.so   # Copy-Item codejam.so "Whever the OBS plugins for Windows are kept"
+
+```
 
 ## Links Containing Information
 The details for the CodeJam can be found [here](https://codejam.timeenjoyed.dev/).
