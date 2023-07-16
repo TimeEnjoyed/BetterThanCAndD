@@ -4,23 +4,39 @@
 #include <QDockWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QFrame>
 #include <QWidget>
-#include <QMessageBox>
+#include <QLabel>
+#include <QInputDialog>
 
-class TestWidget : public QDockWidget {
+#include <plugin-support.h>
+
+#include "browser.hpp"
+#include "TwitchClipFetcher.hpp"
+
+QT_BEGIN_NAMESPACE
+class QLabel;
+QT_END_NAMESPACE;
+
+class BrowserDialog : public QDockWidget {
     Q_OBJECT
 
     public:
-        explicit TestWidget(QWidget *parent = nullptr);
-        ~TestWidget();
+        explicit BrowserDialog(
+            QWidget *parent = nullptr
+        );
+        ~BrowserDialog();
+        const char * getText() const;
 
     private:
-        void buttonClicked();
         QWidget *m_parent;
-        QPushButton *m_button = new QPushButton();
+        QWidget *m_widget;
+        QBoxLayout *m_layout;
+        QLabel *m_text_label;
+        QPushButton *m_text_button;
 
     private slots:
-    void ButtonClicked();
+    void setText();
 
 };
 #endif

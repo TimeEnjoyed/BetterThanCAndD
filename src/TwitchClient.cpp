@@ -12,19 +12,24 @@ TwitchClient::TwitchClient(
 TwitchClient::TwitchClient(): TwitchClient("", "") {
 }
 
-void TwitchClient::setBearer(std::string bearer) {
+void TwitchClient::setBearer(const std::string& bearer) {
     m_bearer = bearer;
 }
 
-void TwitchClient::setClientId(std::string client_id) {
+void TwitchClient::setClientId(const std::string& client_id) {
     m_client_id = client_id;
 }
 
-cpr::Response TwitchClient::fetch(const std::string& endpoint, const std::initializer_list<cpr::Parameter>& params) {
+cpr::Response TwitchClient::fetch(const std::string& endpoint, const std::initializer_list<cpr::Parameter>& params) const {
+    std::cout << "TwitchClient::fetch SANITY CHECK\n";
+
     if (m_bearer == "" || m_client_id == "") {
         throw std::invalid_argument("Either bearer or client id were empty strings");
     }
+
     std::string url = base_url + endpoint;
+    std::cout << "url: " << url << '\n';
+
     cpr::Response r = cpr::Get(
         cpr::Url{url},
         cpr::Header {
@@ -33,6 +38,8 @@ cpr::Response TwitchClient::fetch(const std::string& endpoint, const std::initia
         },
         cpr::Parameters(params)
     );
+
+    std::cout << "After making get request\n";
 
     return r;
 }

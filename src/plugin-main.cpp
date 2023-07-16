@@ -19,25 +19,58 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <obs-module.h>
 #include <obs-frontend-api.h>
 #include <QWidget>
-#include "test.hpp"
 #include <plugin-support.h>
+
+#include "test.hpp"
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
-bool obs_module_load(void)
-{
-	QWidget *main_window = (QWidget *) obs_frontend_get_main_window();
-	TestWidget *testWidget = new TestWidget(main_window);
+/*
+static void OBSEvent(enum obs_frontend_event event, void *) {
+    obs_log(LOG_INFO, "OBSEvent function called");
+    if (event == OBS_FRONTEND_EVENT_FINISHED_LOADING) {
+        set_browser_source_url("Browser", "https:/leetcode.com");
+    }
+}
+*/
 
-	obs_frontend_add_dock(testWidget);
+bool obs_module_load(void) {
+    QWidget *main_window = (QWidget *) obs_frontend_get_main_window();
+    TwitchClient tc = TwitchClient(
+        "",
+        ""
+    );
 
-	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
-		PLUGIN_VERSION);
-	return true;
+    TwitchClipFetcher tcf = TwitchClipFetcher(tc);
+    tcf.setBroadcasterIdFromStreamerHandle("supertf");
+
+    BrowserDialog *browserDialog = new BrowserDialog(main_window);
+
+    const char *browser_source = browserDialog->getText();
+
+    std::pair<std::string, double> clipPair = tcf.fetchRandomClip();
+
+    obs_log(LOG_INFO, "After fetching clip");
+
+    set_browser_source_url(browser_source, clipPair.first.c_str());
+
+    obs_log(LOG_INFO, "After setting browser source url");
+
+    obs_frontend_add_dock(browserDialog);
+
+    /*
+    obs_log(LOG_INFO, "sanity check");
+
+    obs_frontend_add_event_callback(OBSEvent, nullptr);
+    */
+
+    obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
+
+    return true;
 }
 
 void obs_module_unload(void)
 {
-	obs_log(LOG_INFO, "plugin unloaded");
+    obs_log(LOG_INFO, "plugin unloaded");
 }

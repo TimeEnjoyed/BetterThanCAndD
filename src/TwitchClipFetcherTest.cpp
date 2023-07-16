@@ -18,10 +18,10 @@ int main() {
     tcf.setBroadcasterIdFromStreamerHandle("supertf");
     std::cout << "broadcaster_id: " << tcf.getBroadcasterId() << '\n';
 
-    for (int i = 0; i < 50; ++i) {
-        std::pair<std::string, double> p = tcf.fetchRandomClip();
-        std::cout << "clip name, duration: " << p.first << ", " << p.second << '\n';
-    }
+    std::pair<std::string, double> p = tcf.fetchRandomClip();
+    std::cout << "clip name, duration: " << p.first << ", " << p.second << '\n';
+
+    delete tc;
 
     return 0;
 }
